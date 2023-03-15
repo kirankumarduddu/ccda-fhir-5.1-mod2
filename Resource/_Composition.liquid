@@ -8,9 +8,12 @@
             "value": "{{ composition.id.root }}"
         },
         "status": "final",
-        "type": {
-            {% assign codes = composition.code | to_array -%}
-            {% include 'DataType/CodeableConcept' CodeableConcept: codes.first %}
+        "type":
+        {
+            "coding":[
+                {% assign codes = composition.code | to_array -%}
+                {% include 'DataType/CodeableConcept' CodeableConcept: codes.first %}
+            ]
         },
         "date": "{{ composition.effectiveTime.value | format_as_date_time }}",
         "title": "{{ composition.title._ }}",
