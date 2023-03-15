@@ -11,13 +11,15 @@
         {% endif -%}
         "class":
         {
-            {% assign translations = encounter.code.translation | to_array -%}
-            {% if translations.first -%}
-            {% include 'DataType/Coding' Coding: translations.first -%}
-            {% endif -%}
-            {% if translations.first == null -%}
-            {% include 'DataType/Coding' Coding: encounter.code -%}
-            {% endif -%}
+            "coding": [
+                {% assign translations = encounter.code.translation | to_array -%}
+                {% if translations.first -%}
+                {% include 'DataType/Coding' Coding: translations.first -%}
+                {% endif -%}
+                {% if translations.first == null -%}
+                {% include 'DataType/Coding' Coding: encounter.code -%}
+                {% endif -%}
+            ]
         },
         "identifier":
         [
@@ -32,18 +34,22 @@
         },
         "priority":
         {
-            {% include 'DataType/CodeableConcept' CodeableConcept: encounter.priorityCode -%}
+            "coding": [
+                {% include 'DataType/CodeableConcept' CodeableConcept: encounter.priorityCode -%}
+            ]
         },
         "hospitalization":
         {
             "dischargeDisposition":
             {
-                {% include 'DataType/CodeableConcept' CodeableConcept: encounter.dischargeDispositionCode -%}
-            },
+                "coding": [
+                    {% include 'DataType/CodeableConcept' CodeableConcept: encounter.dischargeDispositionCode -%}
+                ]
+            }
         },
     },
     "request":{
         "method":"PUT",
         "url":"Encounter/{{ ID }}",
     },
-},
+}
