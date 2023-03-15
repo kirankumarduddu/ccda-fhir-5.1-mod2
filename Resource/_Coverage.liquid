@@ -1,23 +1,45 @@
 {
-    "fullUrl":"urn:uuid:{{ ID }}",
-    "resource":{
-        "resourceType": "Coverage",
-        "id":"{{ ID }}",
-        "identifier":
-        [
-            {% assign ids = payerEntry.id | to_array -%}
-            {% for id in ids -%}
-            { {% include 'DataType/Identifier' Identifier: id -%} },
-            {% endfor -%}
-        ],
-        "status":"{{ payerEntry.statusCode.code | get_property: 'ValueSet/FMStatus' }}",
-        "relationship":
-        {
-            {% include 'DataType/CodeableConcept' CodeableConcept: payerEntry.code -%}
+  "fullUrl": "urn:uuid:{{ ID }}",
+  "resource": {
+    "resourceType": "Coverage",
+    "id": "{{ ID }}",
+    "identifier": [
+      {% assign ids = payerEntry.id | to_array -%}
+      {% for id in ids -%}
+      { {% include 'DataType/Identifier' Identifier: id -%} },
+      {% endfor -%}
+    ],
+    "status": "{{ payerEntry.statusCode.code | get_property: 'ValueSet/FMStatus' }}",
+    "relationship": {
+      {% include 'DataType/CodeableConcept' CodeableConcept: payerEntry.code -%}
+    },
+    {% if payerEntry.entryRelationship.observation.value -%}
+    "class": [
+      {
+        "type": {
+          "system": "http://terminology.hl7.org/CodeSystem/coverage-class",
+          "code": "plan"
         },
+        "value": "{{ payerEntry.entryRelationship.observation.value.code }}",
+        "name": "{{ payerEntry.entryRelationship.observation.value.displayName }}"
+      }
+    ],
+    {% endif -%}
+    {% if payerEntry.entryRelationship.observation.effectiveTime -%}
+    "period": {
+      "start": "{{ payerEntry.entryRelationship.observation.effectiveTime.low.value | format_as_date_time }}",
+      "end": "{{ payerEntry.entryRelationship.observation.effectiveTime.high.value | format_as_date_time }}"
     },
-    "request":{
-        "method":"PUT",
-        "url":"Coverage/{{ ID }}",
+    {% endif -%}
+    "policyHolder": {
+      "reference": "Patient/{{ resource.Patient.id }}"
     },
-},
+    "beneficiary": {
+      "reference": "Patient/{{ resource.Patient.id }}"
+    }
+  },
+  "request": {
+    "method": "PUT",
+    "url": "Coverage/{{ ID }}"
+  }
+}
