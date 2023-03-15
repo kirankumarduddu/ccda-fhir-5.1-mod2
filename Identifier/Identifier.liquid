@@ -1,0 +1,20 @@
+{% if Identifier.use != null %}
+  "use": "{{ Identifier.use }}",
+{% endif %}
+{% if Identifier.type %}
+  "type": {
+    "coding": [
+      {
+        "system": "{{ Identifier.type.system }}",
+        "code": "{{ Identifier.type.code }}",
+        "display": "{{ Identifier.type.displayName }}"
+      }
+    ]
+  },
+{% endif %}
+{% if Identifier.system %}
+  "system": "{{ Identifier.system }}",
+{% endif %}
+{% if Identifier.value %}
+  "value": "{{ Identifier.value }}"
+{% endif %}
