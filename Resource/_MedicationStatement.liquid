@@ -19,6 +19,15 @@
         "dosage":
         [
             {
+                "text": "{{ medicationStatement.text }}",
+                "timing": {
+                    "repeat": {
+                        "boundsPeriod": {
+                            "start": "{{ medicationStatement.effectiveTime.low.value | format_as_date_time }}",
+                            "end": "{{ medicationStatement.effectiveTime.high.value | format_as_date_time }}"
+                        }
+                    }
+                },
                 "doseAndRate":
                 [
                     {
@@ -27,15 +36,22 @@
                             {
                                 "value":{{ medicationStatement.doseQuantity.value }},
                                 "unit":"{{ medicationStatement.doseQuantity.unit }}",
+                                "system": "http://unitsofmeasure.org",
+                                "code": "{{ medicationStatement.doseQuantity.code }}"
                             },
                         {% endif -%}
                     },
                 ],
             },
         ],
+        "medicationCodeableConcept": { {% include 'DataType/CodeableConcept' CodeableConcept: medicationStatement.consumable.manufacturedProduct.manufacturedMaterial.code -%} },
+        "subject": {
+            "reference": "Patient/{{ resource.Patient.id }}"
+        },
+        "taken": "{{ medicationStatement.taken | get_property: 'ValueSet/MedicationStatementTaken' }}"
     },
     "request":{
         "method":"PUT",
         "url":"MedicationStatement/{{ ID }}",
     },
-},
+}
