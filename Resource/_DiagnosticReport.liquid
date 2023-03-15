@@ -6,7 +6,7 @@
         "identifier": [
             {% assign ids = diagnosticReport.id | to_array %}
             {% for id in ids %}
-            { {% include 'DataType/Identifier' Identifier: id %} },
+            { {% include 'DataType/Identifier' Identifier: id %} }{% unless forloop.last %},{% endunless %}
             {% endfor %}
         ],
         "status": "{{ diagnosticReport.statusCode.code | get_property: 'ValueSet/DiagnosticReportStatus' }}",
