@@ -14,7 +14,7 @@
         [
             { {% include 'DataType/Identifier' Identifier: procedureEntry.id -%} },
         ],
-        "status":"{{ procedureEntry.statusCode.code }}",
+        "status":"{{ procedureEntry.statusCode.code | get_property: 'ValueSet/ProcedureStatus' }}",
         "code":
         {
             {% include 'DataType/CodeableConcept' CodeableConcept: procedureEntry.code -%}
@@ -37,4 +37,4 @@
         "method":"PUT",
         "url":"Procedure/{{ ID }}",
     },
-},
+}
