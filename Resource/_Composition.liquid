@@ -14,7 +14,7 @@
                 {% assign codes = composition.code | to_array -%}
                 {% include 'DataType/CodeableConcept' CodeableConcept: codes.first %}
             ]
-        },
+        }
         "date": "{{ composition.effectiveTime.value | format_as_date_time }}",
         "title": "{{ composition.title._ }}",
         "confidentiality": "{{ composition.confidentialityCode.code }}",
