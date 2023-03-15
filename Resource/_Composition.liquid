@@ -12,6 +12,7 @@
         "date": "{{ composition.effectiveTime.value | format_as_date_time }}",
         "title": "{{ composition.title._ }}",
         "confidentiality": "{{ composition.confidentialityCode.code }}",
+        {% if composition.legalAuthenticator or practitionerId %}
         "attester": [
             {
                 {% if composition.legalAuthenticator %}
@@ -27,6 +28,7 @@
                 {% endif %}
             }
         ],
+        {% endif %}
         "event": [
             {
                 "period": {
