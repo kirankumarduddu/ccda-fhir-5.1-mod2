@@ -6,7 +6,7 @@
         "identifier":
         {
             "use":"official",
-            "value":"{{ composition.id.root }}"
+            "value":"{{ composition.id.root }}",
         },
         "status":"final",
         "type":
@@ -29,10 +29,10 @@
                 "party":
                 {
                     {% if practitionerId -%}
-                    "reference":"Practitioner/{{practitionerId}}"
+                    "reference":"Practitioner/{{practitionerId}}",
                     {% endif -%}
-                }
-            }
+                },
+            },
         ],
         "event":
         [
@@ -40,9 +40,9 @@
                 "period":
                 {
                     "start":"{{ composition.documentationOf.serviceEvent.effectiveTime.low.value | format_as_date_time }}",
-                    "end":"{{ composition.documentationOf.serviceEvent.effectiveTime.high.value | format_as_date_time }}"
-                }
-            }
+                    "end":"{{ composition.documentationOf.serviceEvent.effectiveTime.high.value | format_as_date_time }}",
+                },
+            },
         ],
         "section":
         [
@@ -60,23 +60,23 @@
                     {
                         "status":"generated",
                         {% if component.section.title._ -%}
-                            "div":"<div xmlns=\"http://www.w3.org/1999/xhtml\">{{ component.section.title._ | escape }}</div>"
+                            "div":"<div xmlns=\"http://www.w3.org/1999/xhtml\">{{ component.section.title._ | escape }}</div>",
                         {% else -%}
-                            "div":"<div xmlns=\"http://www.w3.org/1999/xhtml\">{{ component.section.code.displayName | escape }}</div>"
+                            "div":"<div xmlns=\"http://www.w3.org/1999/xhtml\">{{ component.section.code.displayName | escape }}</div>",
                         {% endif -%}
                     },
                     "code":
                     {
                         {% include 'DataType/CodeableConcept' CodeableConcept: component.section.code -%}
                     },
-                    "mode":"snapshot"
+                    "mode":"snapshot",
                 {% endif -%}
-            }{% unless forloop.last %},{% endunless %}
+            },
             {% endfor -%}
-        ]
+        ],
     },
     "request":{
         "method":"PUT",
-        "url":"Composition/{{ ID }}"
-    }
-}
+        "url":"Composition/{{ ID }}",
+    },
+},
