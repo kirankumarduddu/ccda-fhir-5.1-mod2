@@ -1,53 +1,75 @@
 {
-  "fullUrl": "urn:uuid:{{ resource.Patient.id }}",
-  "resource": {
-    "resourceType": "Patient",
-    "id": "{{ resource.Patient.id }}",
-    "meta": {
-      "profile": [
-        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
-      ]
+    "fullUrl":"urn:uuid:{{ ID }}",
+    "resource":{
+        "resourceType": "Patient",
+        "id":"{{ ID }}",
+        "meta":
+        {
+            "profile":
+            [
+                "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient",
+            ],
+        },
+        "identifier":
+        [
+            {% assign ids = patientRole.id | to_array -%}
+            {% for id in ids -%}
+            { {% include 'DataType/Identifier' Identifier: id -%} },
+            {% endfor -%}
+        ],
+        "name":
+        [
+            {% assign names = patientRole.patient.name | to_array -%}
+            {% for name in names -%}
+            { {% include 'DataType/HumanName' HumanName: name -%} },
+            {% endfor -%}
+        ],
+        "birthDate":"{{ patientRole.patient.birthTime.value | add_hyphens_date }}",
+        "gender":"{{ patientRole.patient.administrativeGenderCode.code | get_property: 'ValueSet/Gender' }}",
+        "extension":
+        [
+            { {% include 'Extension/Race' Race: patientRole.patient -%} },
+            { {% include 'Extension/Ethnicity' Ethnicity: patientRole.patient -%} },
+        ],
+        "address":
+        [
+            {% assign addrs = patientRole.addr | to_array -%}
+            {% for addr in addrs -%}
+            { {% include 'DataType/Address' Address: addr -%} },
+            {% endfor -%}
+        ],
+        "telecom":
+        [
+            {% assign telecoms = patientRole.telecom | to_array -%}
+            {% for telecom in telecoms -%}
+            { {% include 'DataType/ContactPoint' ContactPoint: telecom -%} },
+            {% endfor -%}
+        ],
+        "communication":
+        [
+            {% assign languageCommunications = patientRole.patient.languageCommunication | to_array -%}
+            {% for languageCommunication in languageCommunications -%}
+            {
+                "language":
+                {
+                    "coding":
+                    [
+                        {
+                            "system":"urn:ietf:bcp:47",
+                            "code":"{{ languageCommunication.languageCode.code | downcase | get_property: 'ValueSet/Language', , 'code'  }}",
+                            "display":"{{ languageCommunication.languageCode.code | downcase | get_property: 'ValueSet/Language', , 'display'  }}",
+                        },
+                    ],
+                },
+                {% if languageCommunication.preferenceInd.value -%}
+                    "preferred": {{ languageCommunication.preferenceInd.value }},
+                {% endif -%}
+            },
+            {% endfor -%}
+        ],
     },
-    "identifier": [
-      {% include 'Templates/DataType/Identifier.liquid' with id=resource.Patient.id %}
-    ],
-    "name": [
-      {% include 'Templates/DataType/HumanName.liquid' with name=resource.Patient.name %}
-    ],
-    "birthDate": "{{ resource.Patient.birthTime.value | format_date_time }}",
-    "gender": "{{ resource.Patient.administrativeGenderCode.code.code | default: 'unknown' }}",
-    "deceasedBoolean": "{{ resource.Patient.deceasedBoolean }}",
-    "deceasedDateTime": "{{ resource.Patient.deceasedDateTime | format_date_time }}",
-    "maritalStatus": {
-      {% include 'Templates/DataType/CodeableConcept' CodeableConcept: resource.Patient.maritalStatusCode %}
+    "request":{
+        "method":"PUT",
+        "url":"Patient/{{ ID }}",
     },
-    "multipleBirthBoolean": "{{ resource.Patient.multipleBirthBoolean }}",
-    "multipleBirthInteger": "{{ resource.Patient.multipleBirthInteger }}",
-    "extension": [
-      {% include 'Templates/Ccda/Extensions/omb-race-category.liquid' with raceCode=resource.Patient.raceCode %}
-      {% include 'Templates/Ccda/Extensions/omb-ethnicity-category.liquid' with ethnicityCode=resource.Patient.ethnicityCode %}
-    ],
-    "address": [
-      {% include 'Templates/DataType/Address.liquid' with addr=resource.Patient.addr %}
-    ],
-    "telecom": [
-      {% include 'Templates/DataType/Telecom.liquid' with telecom=resource.Patient.telecom %}
-    ],
-    "communication": [
-      {% include 'Templates/Ccda/Communication/Communication.liquid' with languageCommunication=resource.Patient.languageCommunication %}
-    ],
-    "photo": [
-      {% include 'Templates/DataType/Attachment.liquid' Attachment: resource.Patient.photo %}
-    ],
-    "generalPractitioner": [
-      {% include 'Templates/DataType/Reference.liquid' Reference: resource.Patient.generalPractitioner %}
-    ],
-    "managingOrganization": {
-      {% include 'Templates/DataType/Reference.liquid' Reference: resource.Patient.managingOrganization %}
-    }
-  },
-  "request": {
-    "method": "PUT",
-    "url": "Patient/{{ resource.Patient.id }}"
-  }
-}
+},
