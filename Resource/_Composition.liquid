@@ -20,11 +20,11 @@
                 {% if composition.legalAuthenticator %}
                 "time": "{{ composition.legalAuthenticator.time.value | format_as_date_time }}",
                 {% endif %}
+                {% if practitionerId %}
                 "party": {
-                    {% if practitionerId %}
                     "reference": "Practitioner/{{practitionerId}}"
-                    {% endif %}
                 }
+                {% endif %}
             }
         ],
         "event": [
