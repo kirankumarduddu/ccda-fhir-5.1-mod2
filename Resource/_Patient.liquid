@@ -9,17 +9,17 @@
       ]
     },
     "identifier": [
-      {% include 'Templates/Ccda/Identifier/Identifier.liquid' with id=resource.Patient.id %}
+      {% include 'Templates/DataType/Identifier.liquid' with id=resource.Patient.id %}
     ],
     "name": [
-      {% include 'Templates/Ccda/Name/Name.liquid' with name=resource.Patient.name %}
+      {% include 'Templates/DataType/HumanName.liquid' with name=resource.Patient.name %}
     ],
     "birthDate": "{{ resource.Patient.birthTime.value | format_date_time }}",
     "gender": "{{ resource.Patient.administrativeGenderCode.code.code | default: 'unknown' }}",
     "deceasedBoolean": "{{ resource.Patient.deceasedBoolean }}",
     "deceasedDateTime": "{{ resource.Patient.deceasedDateTime | format_date_time }}",
     "maritalStatus": {
-      {% include 'DataType/CodeableConcept' CodeableConcept: resource.Patient.maritalStatusCode %}
+      {% include 'Templates/DataType/CodeableConcept' CodeableConcept: resource.Patient.maritalStatusCode %}
     },
     "multipleBirthBoolean": "{{ resource.Patient.multipleBirthBoolean }}",
     "multipleBirthInteger": "{{ resource.Patient.multipleBirthInteger }}",
@@ -28,22 +28,22 @@
       {% include 'Templates/Ccda/Extensions/omb-ethnicity-category.liquid' with ethnicityCode=resource.Patient.ethnicityCode %}
     ],
     "address": [
-      {% include 'Templates/Ccda/Address/Address.liquid' with addr=resource.Patient.addr %}
+      {% include 'Templates/DataType/Address.liquid' with addr=resource.Patient.addr %}
     ],
     "telecom": [
-      {% include 'Templates/Ccda/Telecom/Telecom.liquid' with telecom=resource.Patient.telecom %}
+      {% include 'Templates/DataType/Telecom.liquid' with telecom=resource.Patient.telecom %}
     ],
     "communication": [
       {% include 'Templates/Ccda/Communication/Communication.liquid' with languageCommunication=resource.Patient.languageCommunication %}
     ],
     "photo": [
-      {% include 'DataType/Attachment' Attachment: resource.Patient.photo %}
+      {% include 'Templates/DataType/Attachment.liquid' Attachment: resource.Patient.photo %}
     ],
     "generalPractitioner": [
-      {% include 'DataType/Reference' Reference: resource.Patient.generalPractitioner %}
+      {% include 'Templates/DataType/Reference.liquid' Reference: resource.Patient.generalPractitioner %}
     ],
     "managingOrganization": {
-      {% include 'DataType/Reference' Reference: resource.Patient.managingOrganization %}
+      {% include 'Templates/DataType/Reference.liquid' Reference: resource.Patient.managingOrganization %}
     }
   },
   "request": {
