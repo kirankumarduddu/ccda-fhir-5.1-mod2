@@ -94,7 +94,10 @@
         ],
         "interpretation":
         [
-            { {% include 'DataType/CodeableConcept' CodeableConcept: observationEntry.interpretationCode -%} },
+            {% assign interpretations = observationEntry.interpretationCode | to_array %}
+            {% for interpretation in interpretations %}
+            { {% include 'DataType/CodeableConcept' CodeableConcept: interpretation %} }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
         ],
     },
     "request":{
