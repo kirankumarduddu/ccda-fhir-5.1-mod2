@@ -1,4 +1,16 @@
-"coding": 
-[
-	{ {% include 'DataType/Coding' Coding: CodeableConcept -%} },
-],
+{
+    "coding":
+    [
+        {
+            {% if CodeableConcept.code -%}
+            "code":"{{ CodeableConcept.code }}",
+            {% endif -%}
+            {% if CodeableConcept.display -%}
+            "display":"{{ CodeableConcept.display | escape }}",
+            {% endif -%}
+            {% if CodeableConcept.system -%}
+            "system":"{{ CodeableConcept.system }}"
+            {% endif -%}
+        }
+    ]
+}
