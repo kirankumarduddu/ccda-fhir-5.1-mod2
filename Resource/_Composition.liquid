@@ -17,8 +17,6 @@
             {
                 {% if composition.legalAuthenticator %}
                 "mode": "legal",
-                {% endif %}
-                {% if composition.legalAuthenticator %}
                 "time": "{{ composition.legalAuthenticator.time.value | format_as_date_time }}",
                 {% endif %}
                 {% if practitionerId %}
