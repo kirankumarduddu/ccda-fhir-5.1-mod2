@@ -2,10 +2,10 @@
     "coding": [
         {
             {% if CodeableConcept.code -%}
-            "code": "{{ CodeableConcept.code }}",
+            "code": "{{ CodeableConcept.code }}"{% if CodeableConcept.display or CodeableConcept.system %},{% endif %}
             {% endif -%}
             {% if CodeableConcept.display -%}
-            "display": "{{ CodeableConcept.display | escape }}",
+            "display": "{{ CodeableConcept.display | escape }}"{% if CodeableConcept.system %},{% endif %}
             {% endif -%}
             {% if CodeableConcept.system -%}
             "system": "{{ CodeableConcept.system }}"
